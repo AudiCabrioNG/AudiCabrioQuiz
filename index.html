@@ -1,0 +1,493 @@
+# AudiCabrioQuiz
+<!doctype html>
+
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>Audi Cabrio Typ 89 – Handy-Quiz</title><style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:linear-gradient(160deg,#090d18,#101a2d 55%,#0b1020);
+  color:#f7f8fb;
+  min-height:100vh;
+}
+
+main{
+  max-width:760px;
+  margin:auto;
+  padding:18px 16px 36px;
+}
+
+.hero{
+  padding:18px 4px 10px;
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#1d2739;
+  color:#fbbf24;
+  font-size:.8rem;
+  font-weight:700;
+  letter-spacing:.04em;
+}
+
+h1{
+  font-size:clamp(1.7rem,6vw,2.8rem);
+  line-height:1.05;
+  margin:12px 0 8px;
+}
+
+.sub{
+  color:#9aa7bd;
+  margin:0 0 18px;
+}
+
+.card{
+  background:rgba(18,26,43,.97);
+  border:1px solid #243149;
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 18px 50px rgba(0,0,0,.25);
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  color:#9aa7bd;
+  font-size:.9rem;
+  margin-bottom:14px;
+}
+
+.bar{
+  height:8px;
+  background:#243149;
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.fill{
+  height:100%;
+  background:#f59e0b;
+  transition:width .25s;
+}
+
+h2{
+  font-size:clamp(1.2rem,4.5vw,1.6rem);
+  line-height:1.25;
+  margin:0 0 18px;
+}
+
+.answers{
+  display:grid;
+  gap:10px;
+}
+
+.btn{
+  width:100%;
+  padding:15px 14px;
+  border-radius:14px;
+  border:1px solid #34435e;
+  background:#172238;
+  color:#fff;
+  font:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+
+.btn:disabled{
+  cursor:default;
+}
+
+.btn.correct{
+  border-color:#22c55e;
+  background:rgba(34,197,94,.15);
+}
+
+.btn.wrong{
+  border-color:#ef4444;
+  background:rgba(239,68,68,.15);
+}
+
+.feedback{
+  min-height:28px;
+  margin-top:14px;
+  font-weight:700;
+}
+
+.good{
+  color:#86efac;
+}
+
+.bad{
+  color:#fca5a5;
+}
+
+.next,
+.again{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:14px;
+  background:#f59e0b;
+  color:#111827;
+  font-weight:800;
+  font-size:1rem;
+  cursor:pointer;
+  margin-top:14px;
+}
+
+.next{
+  display:none;
+}
+
+.result{
+  text-align:center;
+}
+
+.score{
+  font-size:4rem;
+  font-weight:900;
+  line-height:1;
+  margin:15px 0;
+}
+
+.small{
+  color:#9aa7bd;
+}
+
+footer{
+  color:#71809a;
+  text-align:center;
+  font-size:.78rem;
+  padding:18px 0;
+}
+</style></head><body><main><section class="hero">
+<span class="badge">AUDI CABRIO TYP 89</span><h1>Handy-Quiz</h1><p class="sub">
+15 Fragen pro Runde · sofortige Auswertung · ideal zum Teilen
+</p>
+</section><div id="app"></div><footer>
+Fan-Quiz rund um das Audi Cabrio Typ 89
+</footer></main><script>
+
+const pool = [
+
+[
+"Auf welcher Baureihe basiert das Audi Cabrio Typ 89?",
+["Audi 80 B3/B4","Audi A4 B5","Audi 100 C4","Audi Coupé S2"],
+0
+],
+
+[
+"Wie viele Zylinder hat der 2.3 E?",
+["4","5","6","8"],
+1
+],
+
+[
+"Wie viel Leistung hatte der 2.8 E V6?",
+["150 PS","165 PS","174 PS","193 PS"],
+2
+],
+
+[
+"Welcher Motor war der Diesel im Cabrio?",
+["1.6 TD","1.9 TDI","2.0 TDI","2.5 TDI"],
+1
+],
+
+[
+"Wie groß ist der Kofferraum?",
+["180 Liter","210 Liter","230 Liter","280 Liter"],
+2
+],
+
+[
+"In welchem Jahr wurde das Cabrio erstmals präsentiert?",
+["1988","1991","1994","1997"],
+1
+],
+
+[
+"Ab wann gab es das elektrohydraulische Verdeck?",
+["1991","1992","1993","1995"],
+2
+],
+
+[
+"Welche Motoren sind V6?",
+["1.8 und 2.0","2.0 16V und 2.3 E","2.6 E und 2.8 E","1.9 TDI und 2.3 E"],
+2
+],
+
+[
+"Was ist Procon-ten?",
+["Ein Navigationssystem","Ein mechanisches Sicherheitssystem","Ein Sportfahrwerk","Eine Getriebeserie"],
+1
+],
+
+[
+"Welches Holz war beim frühen Cabrio typisch?",
+["Zebrano","Nussbaum-Wurzelholz","Vogelaugenahorn","Kohlefaser"],
+1
+],
+
+[
+"Was passierte 1994 mit der Audi 80 Limousine?",
+["Sie wurde zum Cabrio","Sie wurde vom A4 abgelöst","Sie bekam den V10","Sie lief bis 2002 weiter"],
+1
+],
+
+[
+"Welcher Motor erreicht ungefähr 175 km/h?",
+["1.9 TDI 90 PS","1.8 125 PS","2.6 E V6","2.8 E V6"],
+0
+],
+
+[
+"Welcher Motor hatte 140 PS?",
+["2.0 E","2.0 16V","2.3 E","1.8 20V"],
+1
+],
+
+[
+"Welche Sonderedition ist mit dem späten Cabrio verbunden?",
+["Sunset Edition","Rally Edition","Quattro RS Edition","Nordsee Edition"],
+0
+],
+
+[
+"Welcher Motor erreicht ungefähr 218 km/h?",
+["1.9 TDI","2.3 E","2.6 E V6","2.8 E V6"],
+3
+]
+
+];
+
+let round=[];
+let current=0;
+let score=0;
+let answered=false;
+
+const app=document.getElementById("app");
+
+function shuffle(array){
+  return [...array].sort(()=>Math.random()-0.5);
+}
+
+function startQuiz(){
+
+  round=shuffle(pool).slice(0,15);
+  current=0;
+  score=0;
+
+  showQuestion();
+}
+
+function showQuestion(){
+
+  answered=false;
+
+  const q=round[current];
+
+  app.innerHTML=`
+
+  <section class="card">
+
+    <div class="top">
+      <span>Frage ${current+1} / ${round.length}</span>
+      <span>${score} Punkte</span>
+    </div>
+
+    <div class="bar">
+      <div class="fill"
+           style="width:${(current/round.length)*100}%">
+      </div>
+    </div>
+
+    <h2>${q[0]}</h2>
+
+    <div class="answers">
+
+      ${q[1].map((answer,index)=>`
+
+        <button class="btn"
+                data-index="${index}">
+          ${answer}
+        </button>
+
+      `).join("")}
+
+    </div>
+
+    <div id="feedback" class="feedback"></div>
+
+    <button id="next" class="next">
+      ${current===round.length-1
+        ? "Ergebnis anzeigen"
+        : "Nächste Frage →"}
+    </button>
+
+  </section>
+  `;
+
+  document.querySelectorAll(".btn").forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+      answerQuestion(
+        Number(button.dataset.index)
+      );
+
+    });
+
+  });
+
+}
+
+function answerQuestion(selected){
+
+  if(answered) return;
+
+  answered=true;
+
+  const question=round[current];
+
+  const buttons=[
+    ...document.querySelectorAll(".btn")
+  ];
+
+  buttons.forEach((button,index)=>{
+
+    button.disabled=true;
+
+    if(index===question[2]){
+      button.classList.add("correct");
+    }
+
+    if(
+      index===selected &&
+      selected!==question[2]
+    ){
+      button.classList.add("wrong");
+    }
+
+  });
+
+  const feedback=
+    document.getElementById("feedback");
+
+  if(selected===question[2]){
+
+    score++;
+
+    feedback.innerHTML=
+      '<span class="good">✓ Richtig!</span>';
+
+  }else{
+
+    feedback.innerHTML=
+      '<span class="bad">✗ Nicht ganz.</span>';
+
+  }
+
+  document.getElementById("next")
+    .style.display="block";
+}
+
+app.addEventListener("click",event=>{
+
+  if(event.target.id==="next"){
+
+    current++;
+
+    if(current<round.length){
+
+      showQuestion();
+
+    }else{
+
+      showResult();
+
+    }
+
+  }
+
+});
+
+function showResult(){
+
+  const percentage=
+    Math.round(
+      (score/round.length)*100
+    );
+
+  let message;
+
+  if(percentage===100){
+
+    message=
+      "Perfekt – echter Typ-89-Profi!";
+
+  }else if(percentage>=80){
+
+    message=
+      "Sehr stark – da sitzt einiges.";
+
+  }else if(percentage>=60){
+
+    message=
+      "Ordentlich – ein paar Klassiker gehen noch besser.";
+
+  }else{
+
+    message=
+      "Noch eine Runde lohnt sich!";
+
+  }
+
+  app.innerHTML=`
+
+  <section class="card result">
+
+    <div class="badge">
+      ERGEBNIS
+    </div>
+
+    <div class="score">
+      ${score}/${round.length}
+    </div>
+
+    <h2>
+      ${percentage}% richtig
+    </h2>
+
+    <p class="small">
+      ${message}
+    </p>
+
+    <button
+      class="again"
+      onclick="startQuiz()">
+
+      Neue Runde spielen
+
+    </button>
+
+  </section>
+
+  `;
+}
+
+startQuiz();
+
+</script></body>
+</html>
